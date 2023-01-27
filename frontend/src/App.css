@@ -1,0 +1,146 @@
+:root {
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono",
+    "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --foreground-rgb: 0, 0, 0;
+  --text-color-rgb: 0, 0, 0;
+  --primary-color-rgb: 160, 125, 255;
+  --light-grey: 201, 197, 211;
+  --background-start-rgb: 255, 253, 245;
+  --background-end-rgb: 201, 197, 211;
+}
+
+:root[data-roq-theme-mode="light"] {
+  --roq-color-primary: rgba(var(--primary-color-rgb), 1);
+  --roq-color-text: rgba(var(--text-color-rgb), 1);
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-mono);
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.button {
+  border: solid 3px transparent;
+  cursor: pointer;
+  background-color: rgb(var(--primary-color-rgb));
+  color: #ffffff;
+}
+
+.button.secondary {
+  background-color: rgb(var(--light-grey));
+}
+
+.input {
+  height: 50px;
+  width: 100%;
+  background-color: #ffffff;
+  border: solid 1px rgba(var(--light-grey), 1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 0px 10px;
+}
+
+.header {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  padding: 10px 50px;
+  background-color: #ffffff;
+  overflow: hidden;
+  box-shadow: rgba(var(--light-grey), 0.3) 14px 17px 40px 4px;
+}
+
+.header-links {
+  position: relative;
+  flex: 1 1;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  margin-right: 2rem;
+  display: inline-flex;
+}
+
+.logo img {
+  height: 42px;
+}
+
+.navigation-link {
+  display: inline-flex;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(var(--text-color-rgb));
+}
+
+.navigation-link:hover,
+.navigation-link:focus {
+  text-decoration: underline;
+}
+
+.container {
+  padding: 40px 200px;
+  margin-top: 60px;
+  height: calc(100vh - 50px);
+  width: 100%;
+}
+
+.content {
+  min-height: calc(100vh);
+  height: 1px;
+  padding: 120px 140px 10px 140px;
+}
+
+.unauthorized {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  margin: 0px auto;
+  max-width: 400px;
+  min-height: calc(100vh);
+  width: 100%;
+}
+
+.docs {
+  text-align: center;
+}

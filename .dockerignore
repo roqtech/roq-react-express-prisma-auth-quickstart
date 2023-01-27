@@ -1,0 +1,12 @@
+**/*.env*
+**/*.log
+.DS_Store
+**/docker-compose.yml
+backend/dist
+backend/node_modules
+frontend/node_modules
+frontend/.next
+frontend/.git
+frontend/.results
+frontend/.coverage
+*.log

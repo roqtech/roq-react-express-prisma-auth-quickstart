@@ -1,0 +1,18 @@
+{
+  "name": "roq-react-express-prisma-quickstart-backend",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "PORT=3001 nodemon index.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.9.0",
+    "@roq/nodejs": "^0.1.9",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "prisma": "^4.9.0",
+    "uuid": "^9.0.0"
+  }
+}
