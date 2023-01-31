@@ -4,7 +4,7 @@ This is a [ROQ](https://roq.tech) project showcasing how to use ROQ UI widgets a
 
 - [ROQ React Components](https://www.npmjs.com/package/@roq/ui-react)
 - [ROQ Node.js SDK](https://www.npmjs.com/package/@roq/nodejs)
-- [Next.js](https://nextjs.org), bootstrapped with `create-next-app`
+- [Create React App](https://create-react-app.dev/), bootstrapped with `create-react-app`
 - [Prisma ORM](https://www.prisma.io) with Postgres
 
 ## Get started
