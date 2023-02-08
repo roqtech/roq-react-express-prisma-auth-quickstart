@@ -68,8 +68,10 @@ yarn.lock
 *lint-report.json
 
 # test schema
+backend/.env
 backend/test/schema.gql
 
+frontend/.env
 frontend/cypress/videos/*
 frontend/cypress/downloads/*
 frontend/.nyc_output/
