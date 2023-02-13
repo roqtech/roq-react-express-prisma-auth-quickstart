@@ -28,14 +28,17 @@ function App() {
       host: process.env.REACT_APP_PLATFORM_URL,
       token: user?.roqAccessToken,
       socket: true,
+      auth: {
+        loginURL: "/beta/login",
+      },
     }),
     [user?.roqAccessToken]
   );
 
   return (
     <div className="App">
-      {!!user ? (
-        <RoqProvider config={roqConfig}>
+      <RoqProvider config={roqConfig}>
+        {!!user ? (
           <ChatProvider>
             <header className="header">
               <div className="header-links">
@@ -54,24 +57,23 @@ function App() {
                 </button>
               </div>
             </header>
-            <section className="content">{page === "home" ? <Files /> : <Chat fluid />}</section>
+            <section className="content">{page === "home" ? <Files userId={user.id} /> : <Chat fluid />}</section>
           </ChatProvider>
-        </RoqProvider>
-      ) : (
-        <div className="unauthorized">
-          <AuthorizationForm onAuthorize={handleAuthorize} />
-
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&amp;utm_medium=default-template&amp;utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="docs"
-          >
-            <h2>Docs</h2>
-            <div>https://docs.roq.tech</div>
-          </a>
-        </div>
-      )}
+        ) : (
+          <div className="unauthorized">
+            <AuthorizationForm onAuthorize={handleAuthorize} />
+            <a
+              href="https://nextjs.org/docs?utm_source=create-next-app&amp;utm_medium=default-template&amp;utm_campaign=create-next-app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="docs"
+            >
+              <h2>Docs</h2>
+              <div>https://docs.roq.tech</div>
+            </a>
+          </div>
+        )}
+      </RoqProvider>
     </div>
   );
 }

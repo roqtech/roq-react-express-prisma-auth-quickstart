@@ -112,15 +112,15 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
-app.post("/files/uploaded", async (req, res) => {
+app.post("/files/sync", async (req, res) => {
   if (!req.body) {
     res.status(400).json({ error: "Body not specified" });
     return;
   }
 
-  const { limit = 5, userId: id } = req.body;
+  const { fileId, userId } = req.body;
   const user = await prisma.user.findFirst({
-    where: { id },
+    where: { id: userId },
   });
 
   const roqUserId = user.roqUserId;
@@ -128,9 +128,58 @@ app.post("/files/uploaded", async (req, res) => {
     throw new Error("Could not connect to  ROQ");
   }
 
-  const { files: result } = roqClient.asUser(roqUserId).files({
+  try {
+    let file = await prisma.file.create({
+      data: {
+        roqFileId: fileId,
+        userId,
+      },
+    });
+
+    return res.status(200).json({ file });
+  } catch (err) {
+    res.status(500).json({ error: err.toString() });
+  }
+});
+
+app.get("/files", async (req, res) => {
+  if (!req.body) {
+    res.status(400).json({ error: "Body not specified" });
+    return;
+  }
+
+  const { limit = 5, userId } = req.body;
+  const user = await prisma.user.findFirst({
+    where: { id: userId },
+  });
+
+  const roqUserId = user.roqUserId;
+  if (!roqUserId) {
+    throw new Error("Could not connect to  ROQ");
+  }
+
+  const userFiles = await prisma.file.findMany({
+    where: { userId },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  const roqFileIds = userFiles.map((file) => file.roqFileId);
+
+  if (roqFileIds.length == 0) {
+    return res.status(200).json({
+      data: [],
+      totalCount: 0,
+    });
+  }
+
+  const { files: result } = await roqClient.asUser(roqUserId).files({
     limit,
     filter: {
+      id: {
+        valueIn: roqFileIds,
+      },
       createdByUserId: {
         equalTo: roqUserId,
       },
@@ -138,12 +187,15 @@ app.post("/files/uploaded", async (req, res) => {
   });
 
   const totalCount = result.totalCount;
-  const data = result.data.map(({ id, createdAt, name, url }) => ({
-    id,
-    createdAt,
-    name,
-    url,
-  }));
+  const data = result.data.map(({ id, name, url }) => {
+    const systemFile = userFiles.find((file) => file.roqFileId === id);
+
+    return {
+      id: systemFile.id,
+      name,
+      url,
+    };
+  });
 
   res.status(200).json({
     data,

@@ -1,18 +1,43 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRoqFileUploader, FileUpload } from "@roq/ui-react";
 
 function Files(props) {
+  const { userId } = props;
   const [file, setFile] = useState();
   const [fileUrl, setFileUrl] = useState();
+  const [files, setFiles] = useState([]);
 
   // To control the file upload - i.e trigger the upload when required,
   // you can use this hook to get the fileUploader object
   const fileUploader = useRoqFileUploader({
-    onUploadSuccess: (file) => {
-      setFile(file);
+    onUploadSuccess: async (file) => {
+      const result = await fetch(process.env.REACT_APP_BACKEND_URL + "/files/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          fileId: file.id,
+        }),
+      });
+
+      const data = await result.json();
+
+      if (data.file) {
+        setFile(file);
+
+        setFiles((fileList) => [
+          {
+            id: data.file.id,
+            name: file.name,
+            url: file.url,
+          },
+          ...fileList,
+        ]);
+      } else {
+        throw new Error("Upload error");
+      }
     },
     onUploadFail: (file) => {
-      debugger;
       setFile(undefined);
     },
     onChange: ([file]) => {
@@ -30,6 +55,28 @@ function Files(props) {
 
     setFileUrl(url);
   }, [fileUploader]);
+
+  useEffect(() => {
+    let isMount = true;
+
+    if (isMount) {
+      const fetchFiles = async () => {
+        const result = await fetch(process.env.REACT_APP_BACKEND_URL + "/files", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const { data: fileList } = await result.json();
+        setFiles(fileList);
+      };
+
+      fetchFiles();
+    }
+
+    return () => {
+      isMount = false;
+    };
+  }, []);
 
   return (
     <>
@@ -65,7 +112,15 @@ function Files(props) {
 
       <h3>My files</h3>
 
-      {/* <FileList /> */}
+      <ol>
+        {files.map(({ id, name, url }) => (
+          <li key={id}>
+            <a href={url} target="_blank">
+              {name}
+            </a>
+          </li>
+        ))}
+      </ol>
     </>
   );
 }

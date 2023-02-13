@@ -19,3 +19,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model File {
+  id        String   @id @default(uuid())
+  userId    String   
+  roqFileId String   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([userId, roqFileId], name: "uniqueFile")
+}
